@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 160" fill="none">
+  <!-- Lightbulb icon -->
+  <g transform="translate(20, 10)">
+    <!-- Rays -->
+    <line x1="65" y1="10" x2="65" y2="2" stroke="#D4A843" stroke-width="4" stroke-linecap="round"/>
+    <line x1="90" y1="18" x2="96" y2="12" stroke="#D4A843" stroke-width="4" stroke-linecap="round"/>
+    <line x1="40" y1="18" x2="34" y2="12" stroke="#D4A843" stroke-width="4" stroke-linecap="round"/>
+    <line x1="105" y1="42" x2="113" y2="40" stroke="#D4A843" stroke-width="4" stroke-linecap="round"/>
+    <line x1="25" y1="42" x2="17" y2="40" stroke="#D4A843" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Bulb outline -->
+    <path d="M65 18 C42 18 26 34 26 54 C26 68 34 78 46 86 L46 100 L84 100 L84 86 C96 78 104 68 104 54 C104 34 88 18 65 18 Z" 
+          stroke="#D4A843" stroke-width="4" fill="none" stroke-linejoin="round"/>
+    <!-- Base lines -->
+    <rect x="46" y="102" width="38" height="6" rx="3" stroke="#D4A843" stroke-width="3" fill="none"/>
+    <rect x="50" y="111" width="30" height="5" rx="2.5" stroke="#D4A843" stroke-width="3" fill="none"/>
+    <!-- Filament -->
+    <path d="M58 72 L58 62 Q65 56 72 62 L72 72" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- HELP ME BUSINESS text -->
+  <text x="165" y="58" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#B8CBD8" letter-spacing="2">HELP</text>
+  <text x="165" y="100" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#B8CBD8" letter-spacing="2">ME</text>
+  <text x="165" y="142" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#B8CBD8" letter-spacing="1">BUSINESS</text>
+</svg>
