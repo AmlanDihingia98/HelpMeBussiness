@@ -1,35 +1,53 @@
--- HelpMeBussiness MVP Database Schema
+-- HelpMeBussiness MVP Database Schema (Updated)
+-- Run this in your Supabase SQL Editor
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Table: leads
+-- ============================================================
+-- TABLE: leads
+-- Stores personal details from Step 1 of the Spark Quiz
+-- ============================================================
 CREATE TABLE IF NOT EXISTS public.leads (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    email TEXT NOT NULL,
-    full_name TEXT NOT NULL,
-    phone TEXT NOT NULL
+    id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    created_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    full_name   TEXT NOT NULL,
+    email       TEXT NOT NULL,
+    phone       TEXT NOT NULL
 );
 
--- Policy (optional - enable RLS if needed, these examples keep it public for inserts)
--- ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
--- CREATE POLICY "Allow public insert to leads" ON public.leads FOR INSERT WITH CHECK (true);
-
--- Table: orders
+-- ============================================================
+-- TABLE: orders
+-- Stores the service purchase + all intake form responses
+-- as both individual columns (for easy filtering) and JSONB
+-- ============================================================
 CREATE TABLE IF NOT EXISTS public.orders (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    lead_id UUID NOT NULL REFERENCES public.leads(id) ON DELETE CASCADE,
-    service_name TEXT NOT NULL,
-    amount NUMERIC NOT NULL,
-    payment_status TEXT NOT NULL DEFAULT 'pending',
-    intake_responses JSONB NOT NULL DEFAULT '{}'::jsonb
+    id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    created_at          TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    lead_id             UUID NOT NULL REFERENCES public.leads(id) ON DELETE CASCADE,
+
+    -- Service details
+    service_name        TEXT NOT NULL,
+    amount              NUMERIC NOT NULL,
+    payment_status      TEXT NOT NULL DEFAULT 'pending',
+
+    -- Step 2 Intake Fields (explicit columns for admin filtering)
+    capital             TEXT,
+    time_commitment     TEXT,
+    risk_appetite       TEXT,
+    location            TEXT,
+    skills              TEXT,
+
+    -- Full intake snapshot as JSON (backup / future-proof)
+    intake_responses    JSONB NOT NULL DEFAULT '{}'::jsonb
 );
 
--- Policy (optional)
--- ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
--- CREATE POLICY "Allow public insert to orders" ON public.orders FOR INSERT WITH CHECK (true);
-
--- Note: Admin Notification can be handled by just querying `orders` where payment_status = 'success'. 
--- Alternatively, you can use Supabase Webhooks or Database Triggers to send an email on insert to `orders`.
+-- ============================================================
+-- OPTIONAL: If you already ran the old schema,
+-- use these ALTER statements instead of recreating:
+-- ============================================================
+-- ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS capital TEXT;
+-- ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS time_commitment TEXT;
+-- ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS risk_appetite TEXT;
+-- ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS location TEXT;
+-- ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS skills TEXT;
