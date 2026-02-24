@@ -17,7 +17,7 @@ export async function submitOrderAction(formData: FormData, intakeData: IntakeDa
     const serviceName = formData.get('serviceName') as string || 'Stage 1: Clarity - Idea Spark';
     const amount = Number(formData.get('amount')) || 999;
 
-    // 1. Insert Lead (Step 1 personal details)
+    // Step 1 — Insert Lead
     const { data: leadData, error: leadError } = await supabase
         .from('leads')
         .insert([{ full_name: fullName, email, phone }])
@@ -25,34 +25,57 @@ export async function submitOrderAction(formData: FormData, intakeData: IntakeDa
         .single();
 
     if (leadError) {
-        console.error('Lead insert error:', leadError.message);
-        return { success: false, error: `Failed to save your details: ${leadError.message}` };
+        console.error('[HMB] Lead insert failed:', JSON.stringify(leadError));
+        return { success: false, error: leadError.message };
     }
 
-    // 2. Insert Order with all intake fields as explicit columns + JSONB snapshot
-    const { data: orderData, error: orderError } = await supabase
+    // Step 2 — Try inserting with explicit intake columns (requires ALTER TABLE to have been run).
+    // If that fails due to missing columns, fall back to JSONB-only insert.
+    const fullOrderPayload = {
+        lead_id: leadData.id,
+        service_name: serviceName,
+        amount: amount,
+        payment_status: 'success',
+        capital: intakeData.capital,
+        time_commitment: intakeData.time,
+        risk_appetite: intakeData.risk,
+        location: intakeData.location,
+        skills: intakeData.skills,
+        intake_responses: intakeData,
+    };
+
+    let { data: orderData, error: orderError } = await supabase
         .from('orders')
-        .insert([{
+        .insert([fullOrderPayload])
+        .select()
+        .single();
+
+    // If new columns don't exist yet, fall back to minimal payload
+    if (orderError) {
+        console.warn('[HMB] Full order insert failed, trying minimal payload:', JSON.stringify(orderError));
+
+        const minimalPayload = {
             lead_id: leadData.id,
             service_name: serviceName,
             amount: amount,
             payment_status: 'success',
-            // Explicit columns for easy admin querying
-            capital: intakeData.capital,
-            time_commitment: intakeData.time,
-            risk_appetite: intakeData.risk,
-            location: intakeData.location,
-            skills: intakeData.skills,
-            // Full JSONB snapshot
             intake_responses: intakeData,
-        }])
-        .select()
-        .single();
+        };
 
-    if (orderError) {
-        console.error('Order insert error:', orderError.message);
-        return { success: false, error: `Failed to save your order: ${orderError.message}` };
+        const fallback = await supabase
+            .from('orders')
+            .insert([minimalPayload])
+            .select()
+            .single();
+
+        orderData = fallback.data;
+        orderError = fallback.error;
     }
 
-    return { success: true, orderId: orderData.id };
+    if (orderError) {
+        console.error('[HMB] Order insert failed (both attempts):', JSON.stringify(orderError));
+        return { success: false, error: orderError.message };
+    }
+
+    return { success: true, orderId: orderData?.id };
 }
