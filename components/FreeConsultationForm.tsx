@@ -82,6 +82,9 @@ export function FreeConsultationForm({ onClose }: { onClose: () => void }) {
         setSubmitError(null);
 
         try {
+            // Debug log to check the URL being used
+            console.log('[HMB] Submitting to Supabase URL:', (supabase as any).supabaseUrl);
+
             // Step 1 — Insert Lead (contact details)
             const { data: leadData, error: leadError } = await supabase
                 .from('leads')
@@ -115,7 +118,12 @@ export function FreeConsultationForm({ onClose }: { onClose: () => void }) {
             setIsSuccess(true);
         } catch (err: any) {
             console.error('[HMB] Client-side submission failed:', err);
-            setSubmitError(err.message || 'Something went wrong. Please try again.');
+            // Better error message for common issues
+            let friendlyError = err.message || 'Something went wrong. Please try again.';
+            if (friendlyError.includes('Failed to fetch')) {
+                friendlyError = "Failed to fetch: Check your internet connection or if Supabase environment variables are missing in Vercel.";
+            }
+            setSubmitError(friendlyError);
         } finally {
             setIsLoading(false);
         }
