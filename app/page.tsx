@@ -37,8 +37,7 @@ export default function Home() {
           <a href="#services" className="hover:text-white transition-colors">Services</a>
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="secondary" size="sm" onClick={() => setIsConsultationOpen(true)}>Free Consultation</Button>
-          <Button variant="primary" size="sm" onClick={() => setIsQuizOpen(true)}>Start Spark Quiz</Button>
+          <Button variant="primary" size="sm" onClick={() => setIsConsultationOpen(true)}>Get Free Consultation</Button>
         </div>
       </header>
 
@@ -46,17 +45,17 @@ export default function Home() {
 
         {/* Hero Section */}
         <section className="w-full max-w-4xl text-center space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-[1.1]">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tighter leading-[1.1]">
             You bring the money.<br />
             <span className="text-gradient">We bring the clarity.</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto font-light leading-relaxed">
+          <p className="text-lg md:text-xl lg:text-2xl text-zinc-400 max-w-2xl mx-auto font-light leading-relaxed">
             Before you invest ₹1 lakh, invest <strong className="text-white">₹999</strong> in clarity. Stop guessing and start building with precision.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8 flex-wrap">
-            <Button size="lg" onClick={() => setIsQuizOpen(true)} className="group">
+            <Button size="lg" onClick={() => setIsQuizOpen(true)} className="group w-full sm:w-auto">
               Get Clarity Now — ₹999
               <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
             </Button>
@@ -64,6 +63,7 @@ export default function Home() {
               onClick={() => setIsConsultationOpen(true)}
               variant="secondary"
               size="lg"
+              className="w-full sm:w-auto"
             >
               Get a Free Consultation
             </Button>
@@ -71,6 +71,7 @@ export default function Home() {
               onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
               variant="secondary"
               size="lg"
+              className="w-full sm:w-auto"
             >
               View All Services
             </Button>
@@ -78,7 +79,9 @@ export default function Home() {
         </section>
 
         {/* Detailed Services Section */}
-        <ServicesSection onQuizOpen={() => setIsQuizOpen(true)} />
+        <div className="w-full mt-20 md:mt-40">
+          <ServicesSection onQuizOpen={() => setIsQuizOpen(true)} />
+        </div>
 
       </main>
 

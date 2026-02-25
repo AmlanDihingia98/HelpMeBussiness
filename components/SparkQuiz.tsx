@@ -193,7 +193,7 @@ export function SparkQuiz({ onClose }: { onClose: () => void }) {
                                 <label className="block text-xs font-medium text-zinc-400 mb-1.5 ml-1 flex items-center gap-1.5">
                                     <Clock size={12} className="text-cyan-400" /> Weekly Time Commitment
                                 </label>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                     {['Part-time (10-20 hrs)', 'Full-time (40+ hrs)'].map(opt => (
                                         <button
                                             key={opt}
@@ -212,7 +212,7 @@ export function SparkQuiz({ onClose }: { onClose: () => void }) {
                                 <label className="block text-xs font-medium text-zinc-400 mb-1.5 ml-1 flex items-center gap-1.5">
                                     <Shield size={12} className="text-cyan-400" /> Risk Appetite
                                 </label>
-                                <div className="grid grid-cols-3 gap-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                                     {[
                                         { val: 'Low', desc: 'Safe & steady' },
                                         { val: 'Medium', desc: 'Balanced' },
@@ -232,7 +232,7 @@ export function SparkQuiz({ onClose }: { onClose: () => void }) {
                                 {errors.risk && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.risk}</p>}
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <label className="block text-xs font-medium text-zinc-400 mb-1.5 ml-1 flex items-center gap-1.5">
                                         <MapPin size={12} className="text-cyan-400" /> Location

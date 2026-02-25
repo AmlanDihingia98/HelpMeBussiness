@@ -319,10 +319,10 @@ function ServiceCard({ service, onQuizOpen }: { service: ServiceData; onQuizOpen
 
 export function ServicesSection({ onQuizOpen }: { onQuizOpen: () => void }) {
     return (
-        <section id="services" className="w-full max-w-7xl mt-40 space-y-24">
+        <section id="services" className="w-full max-w-7xl space-y-16 md:space-y-24">
             <div className="text-center space-y-4">
                 <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Services We Offer</h2>
-                <p className="text-zinc-400 text-lg max-w-xl mx-auto">From idea to income — every step of the journey.</p>
+                <p className="text-zinc-400 text-base md:text-lg max-w-xl mx-auto">From idea to income — every step of the journey.</p>
             </div>
 
             {/* Stage 1: Clarity */}

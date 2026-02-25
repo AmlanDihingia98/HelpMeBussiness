@@ -165,7 +165,7 @@ export function FreeConsultationForm({ onClose }: { onClose: () => void }) {
                     {/* Step 2: Business Metrics */}
                     {step === 2 && (
                         <div className="space-y-5 py-2">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label className={labelClass}><Building2 size={12} className="text-purple-400" /> Type of Business</label>
                                     <input type="text" autoFocus className={inputClass('businessType')} value={formData.businessType} onChange={e => setFormData({ ...formData, businessType: e.target.value })} placeholder="e.g. Retail, SaaS, Agency" />
@@ -184,7 +184,7 @@ export function FreeConsultationForm({ onClose }: { onClose: () => void }) {
                                 {errors.customers && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.customers}</p>}
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
                                     <label className={labelClass}><IndianRupee size={12} className="text-purple-400" /> Current Revenue</label>
                                     <input type="text" className={inputClass('revenue')} value={formData.revenue} onChange={e => setFormData({ ...formData, revenue: e.target.value })} placeholder="e.g. ₹5 Lakh/mo" />
