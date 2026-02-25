@@ -2,27 +2,13 @@
 
 import { useState } from 'react';
 import { X, ArrowRight, ArrowLeft, CheckCircle2, User, Mail, Phone, Building2, MapPin, Users, IndianRupee, Wallet, Target, Rocket } from 'lucide-react';
-import { supabase } from '@/utils/supabase';
+import { submitConsultationAction, ConsultationData } from '@/app/actions/submit-consultation';
 
 const steps = [
     { id: 1, title: 'Contact', description: 'Your personal details' },
     { id: 2, title: 'Business', description: 'Current scale & numbers' },
     { id: 3, title: 'Goals', description: 'Your vision' },
 ];
-
-export interface ConsultationData {
-    fullName: string;
-    email: string;
-    phone: string;
-    businessType: string;
-    city: string;
-    customers: string;
-    revenue: string;
-    expense: string;
-    profit: string;
-    shortTermGoal: string;
-    longTermGoal: string;
-}
 
 export function FreeConsultationForm({ onClose }: { onClose: () => void }) {
     const [step, setStep] = useState(1);
@@ -82,46 +68,18 @@ export function FreeConsultationForm({ onClose }: { onClose: () => void }) {
         setSubmitError(null);
 
         try {
-            // Debug log to check the URL being used
-            console.log('[HMB] Submitting to Supabase URL:', (supabase as any).supabaseUrl);
+            const result = await submitConsultationAction(formData);
 
-            // Step 1 — Insert Lead (contact details)
-            const { data: leadData, error: leadError } = await supabase
-                .from('leads')
-                .insert([{
-                    full_name: formData.fullName,
-                    email: formData.email,
-                    phone: formData.phone,
-                }])
-                .select()
-                .single();
-
-            if (leadError) throw new Error(`Lead save failed: ${leadError.message}`);
-
-            // Step 2 — Insert into the dedicated consultations table
-            const { error: consultationError } = await supabase
-                .from('consultations')
-                .insert([{
-                    lead_id: leadData.id,
-                    business_type: formData.businessType,
-                    city: formData.city,
-                    num_customers: formData.customers,
-                    current_revenue: formData.revenue,
-                    current_expense: formData.expense,
-                    profit_after_tax: formData.profit,
-                    short_term_goal: formData.shortTermGoal,
-                    long_term_goal: formData.longTermGoal,
-                }]);
-
-            if (consultationError) throw new Error(`Consultation save failed: ${consultationError.message}`);
-
-            setIsSuccess(true);
+            if (result.success) {
+                setIsSuccess(true);
+            } else {
+                setSubmitError(result.error || 'Something went wrong. Please try again.');
+            }
         } catch (err: any) {
-            console.error('[HMB] Client-side submission failed:', err);
-            // Better error message for common issues
+            console.error('[HMB] Submission failed:', err);
             let friendlyError = err.message || 'Something went wrong. Please try again.';
-            if (friendlyError.includes('Failed to fetch')) {
-                friendlyError = "Failed to fetch: Check your internet connection or if Supabase environment variables are missing in Vercel.";
+            if (friendlyError.includes('fetch')) {
+                friendlyError = "Network error: The server could not reach Supabase. This should work in production if environment variables are set.";
             }
             setSubmitError(friendlyError);
         } finally {
