@@ -5,6 +5,29 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ============================================================
+-- TABLE: consultations
+-- Stores data submitted via the "Get a Free Consultation" form.
+-- Linked to a lead via lead_id.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.consultations (
+    id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    created_at          TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    lead_id             UUID NOT NULL REFERENCES public.leads(id) ON DELETE CASCADE,
+
+    -- Business Info
+    business_type       TEXT,
+    city                TEXT,
+    num_customers       TEXT,
+    current_revenue     TEXT,
+    current_expense     TEXT,
+    profit_after_tax    TEXT,
+
+    -- Goals
+    short_term_goal     TEXT,
+    long_term_goal      TEXT
+);
+
+-- ============================================================
 -- TABLE: leads
 -- Stores personal details from Step 1 of the Spark Quiz
 -- ============================================================

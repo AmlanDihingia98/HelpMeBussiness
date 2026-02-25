@@ -5,9 +5,11 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { SparkQuiz } from '@/components/SparkQuiz';
 import { ServicesSection } from '@/components/ServicesSection';
+import { FreeConsultationForm } from '@/components/FreeConsultationForm';
 
 export default function Home() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isConsultationOpen, setIsConsultationOpen] = useState(false);
 
   return (
     <div className="min-h-screen relative flex flex-col">
@@ -34,7 +36,10 @@ export default function Home() {
         <nav className="hidden md:flex gap-6 text-sm font-medium text-zinc-400">
           <a href="#services" className="hover:text-white transition-colors">Services</a>
         </nav>
-        <Button variant="primary" size="sm" onClick={() => setIsQuizOpen(true)}>Start Spark Quiz</Button>
+        <div className="flex items-center gap-2">
+          <Button variant="secondary" size="sm" onClick={() => setIsConsultationOpen(true)}>Free Consultation</Button>
+          <Button variant="primary" size="sm" onClick={() => setIsQuizOpen(true)}>Start Spark Quiz</Button>
+        </div>
       </header>
 
       <main className="flex-1 flex flex-col items-center pt-24 pb-32 px-6">
@@ -50,10 +55,17 @@ export default function Home() {
             Before you invest ₹1 lakh, invest <strong className="text-white">₹999</strong> in clarity. Stop guessing and start building with precision.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8 flex-wrap">
             <Button size="lg" onClick={() => setIsQuizOpen(true)} className="group">
               Get Clarity Now — ₹999
               <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+            </Button>
+            <Button
+              onClick={() => setIsConsultationOpen(true)}
+              variant="secondary"
+              size="lg"
+            >
+              Get a Free Consultation
             </Button>
             <Button
               onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
@@ -71,6 +83,7 @@ export default function Home() {
       </main>
 
       {isQuizOpen && <SparkQuiz onClose={() => setIsQuizOpen(false)} />}
+      {isConsultationOpen && <FreeConsultationForm onClose={() => setIsConsultationOpen(false)} />}
     </div>
   );
 }
