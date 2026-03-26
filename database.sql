@@ -82,3 +82,25 @@ ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS vintage TEXT;
 ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS turnover TEXT;
 ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS challenge TEXT;
 ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS details TEXT;
+
+-- ============================================================
+-- RLS (ROW LEVEL SECURITY) POLICIES
+-- To allow the website to save leads and orders without auth
+-- ============================================================
+
+-- Disable RLS for MVP (simplest fix)
+ALTER TABLE public.leads DISABLE ROW LEVEL SECURITY;
+ALTER TABLE public.orders DISABLE ROW LEVEL SECURITY;
+ALTER TABLE public.consultations DISABLE ROW LEVEL SECURITY;
+
+-- OR, if you prefer to keep RLS enabled but allow anonymous inserts:
+/*
+ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow anonymous inserts" ON public.leads FOR INSERT WITH CHECK (true);
+
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow anonymous inserts" ON public.orders FOR INSERT WITH CHECK (true);
+
+ALTER TABLE public.consultations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow anonymous inserts" ON public.consultations FOR INSERT WITH CHECK (true);
+*/
